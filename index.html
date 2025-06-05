@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JK Corporation Quotation</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 30px;
+      background: #ccc;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    .a4-page {
+      width: 210mm;
+      height: 297mm;
+      margin: auto;
+      background: white;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .inner-outline {
+      position: absolute;
+      top: 235px;
+      left: 10px;
+      right: 40px;
+      bottom: 60px;
+      border: 1px solid black;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section {
+      border-top: 1px solid black;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .section:first-child {
+      border-top: none;
+    }
+
+    .section-1 {
+      flex: 0 0 auto;
+    }
+
+    .section-2 {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-3 {
+      display: flex;
+      border-top: 1px solid black;
+      height: 320px;
+    }
+
+    .section-3-left,
+    .section-3-right {
+      flex: 1;
+      border-right: 1px solid black;
+      box-sizing: border-box;
+      padding: 10px;
+    }
+
+    .section-3-right {
+      display: flex;
+      flex-direction: column;
+      border-right: none;
+    }
+
+    .section-3-right-top,
+    .section-3-right-bottom {
+      flex: 10;
+      border-top: 1px solid black;
+      box-sizing: border-box;
+    }
+
+    .section-3-right-top {
+      border-top: none; /* no top border on the top half */
+    }
+
+    .section-1-top {
+      display: flex;
+      border-bottom: 1px solid black;
+    }
+
+    .section-1-bottom {
+      display: flex;
+    }
+
+    .section-1-left,
+    .section-1-right {
+      flex: 1;
+      padding: 6px 10px;
+      box-sizing: border-box;
+      display: flex;
+    }
+
+    .section-1-left:first-child,
+    .section-1-top .section-1-left {
+      border-right: 1px solid black;
+    }
+
+    input,
+    textarea {
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 14px;
+      background: transparent;
+      padding: 0;
+      margin-left: 8px;
+      width: auto;
+      flex: 1;
+      -moz-appearance: textfield;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    textarea {
+      resize: none;
+      width: 100%;
+      height: 36px;
+    }
+
+    .section-1-bottom .section-1-left,
+    .section-1-bottom .section-1-right {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .label-inline {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 2px;
+    }
+
+    .label-block {
+      margin: 4px 0 2px;
+      font-weight: bold;
+    }
+
+    .section-1-left span {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .section-1-right textarea {
+      margin-top: 0px;
+      margin-bottom: 2px;
+    }
+
+    .table-wrapper {
+      flex-grow: 1;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 14px;
+    }
+
+    thead th {
+      border: 1px solid black;
+      padding: 3px;
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    tbody td {
+      border: 1px solid black;
+      padding: 2px 15px;
+      vertical-align: middle;
+    }
+
+    tbody td input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+    }
+
+    tbody td:not(.description) input {
+      text-align: left;
+      padding: 2px;
+    }
+
+    tbody td.description {
+      word-wrap: break-word;
+      white-space: normal;
+    }
+
+    tbody td.description input {
+      text-align: left;
+      padding-left: 0;
+      white-space: normal;
+      word-wrap: break-word;
+    }
+
+    tfoot td {
+      border: 1px solid black;
+      padding: 2px 4px;
+      text-align: right;
+      vertical-align: middle;
+    }
+
+    tfoot td input {
+      width: 100%;
+      text-align: center;
+    }
+
+    .amount-words {
+      padding-top: 10px;
+      font-style: italic;
+      font-size: 14px;
+    }
+
+    .a4-page {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  margin: auto;
+  background: white;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-header,
+.page-footer {
+  width: 210mm;       /* exactly A4 width */
+  box-sizing: border-box;
+  flex-shrink: 0;
+  padding-right: 27px;
+}
+
+.page-header {
+  height: 200px;       /* adjust height as needed */
+  overflow: hidden;   /* hide overflow if any */
+}
+
+.page-header img {
+  width: 100%;        /* full width of header container */
+  height: auto;       /* maintain aspect ratio */
+  display: block;     /* removes bottom gap */
+}
+
+.page-footer {
+  height: 60px;       /* adjust height as needed */
+  overflow: hidden;
+}
+
+.page-footer img {
+  width: 100%;        /* full width of footer container */
+  height: auto;
+  display: block;
+}
+
+.Quotation-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  padding-top: 0px;
+  margin-bottom: 10px;
+  padding-bottom: 807px;
+  padding-right: 20px;
+}
+
+
+
+  </style>
+</head>
+<body>
+  <div class="a4-page">
+
+     <!-- Header -->
+  <div class="page-header">
+    <img src="header-image.png" alt="Header Logo" />
+  </div>
+
+    <div class="Quotation-title">QUOTATION</div>
+
+    <div class="inner-outline">
+
+      <!-- Section 1 -->
+      <div class="section section-1">
+        <div class="section-1-top">
+          <div class="section-1-left">
+            <div class="label-inline">
+              <strong>Date:</strong>
+              <input type="text" />
+            </div>
+          </div>
+          <div class="section-1-right">
+            <div class="label-inline">
+              <strong>Quotation No:</strong>
+              <input type="text" />
+            </div>
+          </div>
+        </div>
+
+        <div class="section-1-bottom">
+          <div class="section-1-left">
+            <span class="label-block">Sold By:</span>
+            <span>JK CORPORATION</span>
+            <span>
+              18/107 Mayur Park, Opposite Akshar Apartment and ICICI and SBI ATM,<br />
+              Near Akshar Apartment bus stand, Samta, Vadodara, Gujarat, 390023.
+            </span>
+            <span style="margin-top: 4px;"><strong>GST No:</strong> 24APOPP0134K1ZT</span>
+          </div>
+          <div class="section-1-right">
+            <div class="label-inline">
+              <strong>Buyer Name:</strong>
+              <input type="text" />
+            </div>
+            <span class="label-block">Address:</span>
+            <textarea></textarea>
+            <div class="label-inline">
+              <strong>Mobile No.:</strong>
+              <input type="text" />
+            </div>
+            <div class="label-inline" style="margin-top: 0;">
+              <strong>GST No:</strong>
+              <input type="text" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="section section-2">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 6%;">Sr. No.</th>
+                <th style="width: 38%;">Description</th>
+                <th style="width: 10%;">HSN/SAC</th>
+                <th style="width: 7%;">Qty</th>
+                <th style="width: 10%;">Rate</th>
+                <th style="width: 9%;">GST %</th>
+                <th style="width: 10%;">GST Amt</th>
+                <th style="width: 10%;">Amt (Rs)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <script>
+                for (let i = 1; i <= 10; i++) {
+                  document.write('<tr>');
+                  document.write(`<td><input type="text" value="${i}" /></td>`);
+                  document.write('<td class="description"><input type="text" /></td>');
+                  document.write('<td><input type="text" /></td>');
+                  document.write('<td><input type="text" /></td>');
+                  document.write('<td><input type="text" /></td>');
+                  document.write('<td><input type="text" /></td>');
+                  document.write('<td><input type="text" readonly /></td>');
+                  document.write('<td><input type="text" readonly /></td>');
+                  document.write('</tr>');
+                }
+              </script>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="7">CGST</td>
+                <td><input type="text" readonly /></td>
+              </tr>
+              <tr>
+                <td colspan="7">SGST</td>
+                <td><input type="text" readonly /></td>
+              </tr>
+              <tr>
+                <td colspan="7"><strong>Total Amount</strong></td>
+                <td><input type="text" readonly /></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="amount-words">Amount in words:</div>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="section section-3">
+        <div class="section-3-left">
+            <span><b>Terms & Conditions</b><br><br></span>
+            <span>
+              1. Quarterly four service free.<br><br>
+              2. Breakdown and service call will be attended within 24hrs of calling.<br><br>
+              3. Any electrical parts, Gas charging will be chargeable.<br><br>
+              4. Payment should be done 100% before only.<br><br>
+              5. It is a comprehensive annual maintenance contract excluding compressor.<br><br>
+            </span>
+        </div>
+        <div class="section-3-right">
+  <div class="section-3-right-top" style="display: flex; align-items: flex-start; justify-content: space-between;">
+    <div>
+      <strong><b>Bank Details:</b></strong><br><br>
+      Bank Name: Canara Bank<br><br>
+      A/C No.: 120012845253<br><br>
+      IFSC Code: CNRB0003575<br><br>
+      UPI ID: jay.l.pitroda@oksbi
+    </div>
+    <div>
+      <img src="JK QR.jpeg" alt="QR Code" style="width: 150px; height: 150px;" />
+    </div>
+  </div>
+  <div class="section-3-right-bottom" style="display: flex; align-items: flex-end; justify-content: flex-end;">
+    <div style="text-align: right;">
+      Signature with Seal<br/>
+      <strong>JK CORPORATION</strong>
+    </div>
+  </div>
+</div>
+      </div>    
+  </div>
+   
+
+  <script>
+  function numberToWords(num) {
+    const a = [
+      '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven',
+      'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen',
+      'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+    ];
+    const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+    function inWords(n) {
+      if (n < 20) return a[n];
+      if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? ' ' + a[n % 10] : '');
+      if (n < 1000) return a[Math.floor(n / 100)] + ' Hundred' + (n % 100 ? ' and ' + inWords(n % 100) : '');
+      if (n < 100000) return inWords(Math.floor(n / 1000)) + ' Thousand' + (n % 1000 ? ' ' + inWords(n % 1000) : '');
+      if (n < 10000000) return inWords(Math.floor(n / 100000)) + ' Lakh' + (n % 100000 ? ' ' + inWords(n % 100000) : '');
+      return inWords(Math.floor(n / 10000000)) + ' Crore' + (n % 10000000 ? ' ' + inWords(n % 10000000) : '');
+    }
+
+    const [rupees, paise] = num.toFixed(2).split('.');
+    let words = inWords(parseInt(rupees)) + ' Rupees';
+    if (parseInt(paise) > 0) {
+      words += ' and ' + inWords(parseInt(paise)) + ' Paise';
+    }
+    return words + ' Only';
+  }
+
+  function calculate() {
+    const rows = document.querySelectorAll("tbody tr");
+    let totalGST = 0;
+    let totalAmount = 0;
+
+    rows.forEach(row => {
+      const qty = parseFloat(row.cells[3].querySelector("input").value) || 0;
+      const rate = parseFloat(row.cells[4].querySelector("input").value) || 0;
+      const gstPercent = parseFloat(row.cells[5].querySelector("input").value) || 0;
+
+      const basicAmount = qty * rate;
+      const gstAmount = (basicAmount * gstPercent) / 100;
+      const amount = basicAmount + gstAmount;
+
+      row.cells[6].querySelector("input").value = gstAmount ? gstAmount.toFixed(2) : "";
+      row.cells[7].querySelector("input").value = amount ? amount.toFixed(2) : "";
+
+      totalGST += gstAmount;
+      totalAmount += amount;
+    });
+
+    document.querySelector("tfoot tr:nth-child(1) input").value = (totalGST / 2).toFixed(2);
+    document.querySelector("tfoot tr:nth-child(2) input").value = (totalGST / 2).toFixed(2);
+    document.querySelector("tfoot tr:nth-child(3) input").value = totalAmount.toFixed(2);
+
+    // Add amount in words here
+    document.querySelector(".amount-words").textContent = "Amount in words: " + numberToWords(totalAmount);
+  }
+
+  document.querySelectorAll("tbody input[type=text]").forEach(input => {
+    input.addEventListener("input", calculate);
+  });
+
+  calculate();
+
+</script>
+</body>
+</html>
